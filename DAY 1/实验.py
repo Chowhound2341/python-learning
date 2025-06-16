@@ -1,17 +1,15 @@
-# 定义一个包含多种类型元素的列表
-my_list = ['abcd', 786, 2.23, 'runoob', 70.2]
-# 定义一个较小的列表
-tiny_list = [123, 'runoob']
-
-# 打印整个列表
-print(my_list)
-# 打印列表的第一个元素
-print(my_list[0])
-# 打印列表的第二到第三个元素（不包含第四个元素）
-print(my_list[1:3])
-# 打印列表从第三个元素开始到末尾
-print(my_list[2:])
-# 打印tiny_list列表两次
-print(tiny_list * 2)
-# 打印两个列表拼接在一起的结果
-print(my_list + tiny_list)
+#实现一个快速排序算法
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+# 测试快速排序算法
+if __name__ == "__main__":
+    test_array = [3, 6, 8, 10, 1, 2, 1]
+    sorted_array = quick_sort(test_array)
+    print("原数组:", test_array)
+    print("排序后数组:", sorted_array)
