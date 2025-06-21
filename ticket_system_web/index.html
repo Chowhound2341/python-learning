@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>47游乐园智能门票系统</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 欢迎头部 -->
+        <header class="welcome-header">
+            <div class="welcome-banner">
+                <h1>🎪 欢迎来到47游乐园！ 🎪</h1>
+                <div class="date-time-info">
+                    <span id="current-date-time"></span>
+                    <span id="weather-status"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 票价说明 -->
+        <section class="price-info">
+            <h2>💰 票价说明</h2>
+            <div class="price-grid">
+                <div class="price-item">
+                    <span class="emoji">🍼</span>
+                    <span class="age">0-2岁婴幼儿</span>
+                    <span class="price">免费</span>
+                </div>
+                <div class="price-item">
+                    <span class="emoji">👶</span>
+                    <span class="age">3-17岁儿童</span>
+                    <span class="price">免费</span>
+                </div>
+                <div class="price-item">
+                    <span class="emoji">🎓</span>
+                    <span class="age">18-24岁学生</span>
+                    <span class="price">¥30</span>
+                </div>
+                <div class="price-item">
+                    <span class="emoji">👔</span>
+                    <span class="age">18-59岁成人</span>
+                    <span class="price">¥68</span>
+                </div>
+                <div class="price-item">
+                    <span class="emoji">👴</span>
+                    <span class="age">60岁以上老人</span>
+                    <span class="price">¥34</span>
+                </div>
+                <div class="price-item">
+                    <span class="emoji">♿</span>
+                    <span class="age">残疾人士</span>
+                    <span class="price">免费</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 优惠政策 -->
+        <section class="discount-info">
+            <h2>🎁 优惠政策</h2>
+            <ul class="discount-list">
+                <li>📅 工作日成人票9折</li>
+                <li>🌅 早鸟优惠（10点前）额外5%折扣</li>
+                <li>📈 周末票价上浮20%</li>
+            </ul>
+        </section>
+
+        <!-- 购票表单 -->
+        <section class="ticket-form">
+            <h2>🎫 购买门票</h2>
+            <form id="ticket-purchase-form">
+                <div class="form-group">
+                    <label for="age">👤 请输入您的年龄：</label>
+                    <input type="number" id="age" min="0" max="150" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>🎓 身份验证：</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="is-student">
+                            <span class="checkmark"></span>
+                            持有有效学生证
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="is-disabled">
+                            <span class="checkmark"></span>
+                            持有残疾证
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="purchase-btn">
+                    <i class="fas fa-ticket-alt"></i>
+                    购买门票
+                </button>
+            </form>
+        </section>
+
+        <!-- 门票显示区域 -->
+        <section id="ticket-display" class="ticket-display" style="display: none;">
+            <div class="ticket">
+                <div class="ticket-header">
+                    <h3>🎪 47游乐园电子门票 🎪</h3>
+                </div>
+                <div class="ticket-content">
+                    <div class="ticket-info">
+                        <div class="info-item">
+                            <span class="label">🆔 票号：</span>
+                            <span id="ticket-id"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">👤 年龄：</span>
+                            <span id="ticket-age"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">🎭 类别：</span>
+                            <span id="ticket-type"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">📅 日期：</span>
+                            <span id="ticket-date"></span>
+                        </div>
+                        <div class="info-item price-info-item">
+                            <span class="label">💰 票价：</span>
+                            <span id="ticket-price"></span>
+                        </div>
+                        <div id="discount-info" class="discount-details" style="display: none;">
+                            <div class="info-item">
+                                <span class="label">💰 原价：</span>
+                                <span id="original-price"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">🎁 折扣：</span>
+                                <span id="discount-percent"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">💳 实付：</span>
+                                <span id="final-price"></span>
+                            </div>
+                        </div>
+                        <div id="special-notes" class="special-notes" style="display: none;">
+                            <div class="label">📝 优惠详情：</div>
+                            <ul id="notes-list"></ul>
+                        </div>
+                    </div>
+                    <div class="qr-code">
+                        <div class="qr-title">📱 请出示此票据入园：</div>
+                        <div class="qr-code-art" id="qr-code"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="success-message">
+                <p>🎉 购票成功！祝您在47游乐园玩得愉快！</p>
+                <p>🛡️ 安全提醒：请遵守园区规定，注意人身安全！</p>
+            </div>
+            
+            <button id="new-ticket-btn" class="new-ticket-btn">
+                <i class="fas fa-plus"></i>
+                购买新门票
+            </button>
+        </section>
+
+        <!-- 园区信息 -->
+        <section class="park-info">
+            <h2>🎪 园区信息</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>开园时间</h3>
+                    <p>08:00 - 22:00</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-star"></i>
+                    <h3>热门项目</h3>
+                    <p>过山车、摩天轮、激流勇进</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-utensils"></i>
+                    <h3>餐饮服务</h3>
+                    <p>美食广场、主题餐厅</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-car"></i>
+                    <h3>停车信息</h3>
+                    <p>免费停车位充足</p>
+                </div>
+            </div>
+            <div class="contact-info">
+                <p>📞 客服热线：400-047-047</p>
+            </div>
+        </section>
+
+        <!-- 今日统计 -->
+        <section class="daily-stats">
+            <h2>📊 今日园区统计</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-visitors">0</div>
+                    <div class="stat-label">👥 总访客数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-revenue">¥0</div>
+                    <div class="stat-label">💰 总收入</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avg-price">¥0</div>
+                    <div class="stat-label">📈 平均票价</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
