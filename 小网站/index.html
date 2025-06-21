@@ -2,102 +2,490 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>47游乐园智能门票系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>47游乐园智能门票系统 - 终极炫酷版 | 官方购票平台</title>
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    
+    <!-- 样式表 -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- SEO优化 -->
+    <meta name="description" content="47游乐园官方智能门票系统，支持多种票价类型、实时折扣计算、二维码门票生成、主题切换、统计分析等全功能服务">
+    <meta name="keywords" content="47游乐园,门票系统,智能购票,电子门票,二维码,主题乐园,游乐园门票,在线购票,实时折扣">
+    <meta name="author" content="47游乐园官方">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / 社交媒体分享 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="47游乐园智能门票系统">
+    <meta property="og:description" content="体验最先进的智能门票系统，享受便捷购票服务">
+    <meta property="og:site_name" content="47游乐园">
+    
+    <!-- PWA支持 -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="47游乐园">
+    
+    <!-- 性能优化 -->
+    <link rel="dns-prefetch" href="//api.qrserver.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "47游乐园",
+        "description": "现代化主题游乐园，提供多种刺激有趣的游乐设施",
+        "url": "https://www.47park.com",
+        "telephone": "400-047-047",
+        "openingHours": "Mo-Su 08:00-22:00"
+    }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <!-- 欢迎头部 -->
-        <header class="welcome-header">
+    <!-- 页面加载动画 -->
+    <div id="page-loader" class="page-loader">
+        <div class="loader-content">
+            <div class="loader-logo">🎪</div>
+            <div class="loader-text">47游乐园</div>
+            <div class="loader-progress">
+                <div class="loader-bar"></div>
+            </div>
+            <div class="loader-tip">正在为您准备精彩体验...</div>
+        </div>
+    </div>
+
+    <!-- 背景装饰元素 -->
+    <div class="background-decoration">
+        <div class="floating-bubble" style="--delay: 0s; --duration: 8s;"></div>
+        <div class="floating-bubble" style="--delay: 2s; --duration: 10s;"></div>
+        <div class="floating-bubble" style="--delay: 4s; --duration: 12s;"></div>
+        <div class="floating-bubble" style="--delay: 6s; --duration: 9s;"></div>
+        <div class="floating-bubble" style="--delay: 1s; --duration: 11s;"></div>
+    </div>
+
+    <!-- 音乐控制器 -->
+    <div class="music-controller">
+        <button id="music-toggle" class="music-btn" title="背景音乐">
+            <i class="fas fa-music"></i>
+        </button>
+        <audio id="background-music" loop>
+            <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEtCHW2/e1+JAYsgtL2/4VMBuV3r+/4" type="audio/wav">
+        </audio>
+    </div>
+
+    <!-- 快捷操作面板 -->
+    <div class="floating-panel">
+        <button class="panel-btn" id="accessibility-btn" title="无障碍模式">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        <button class="panel-btn" id="fullscreen-btn" title="全屏模式">
+            <i class="fas fa-expand"></i>
+        </button>
+        <button class="panel-btn" id="print-btn" title="打印门票">
+            <i class="fas fa-print"></i>
+        </button>
+        <button class="panel-btn" id="share-btn" title="分享给朋友">
+            <i class="fas fa-share-alt"></i>
+        </button>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container" id="main-container">
+        <!-- 页面头部导航 -->
+        <nav class="top-navigation" role="navigation" aria-label="主导航">
+            <div class="nav-brand">
+                <span class="brand-logo">🎪</span>
+                <span class="brand-text">47游乐园</span>
+            </div>
+            <div class="nav-links">
+                <a href="#price-info" class="nav-link">票价信息</a>
+                <a href="#ticket-form" class="nav-link">购票</a>
+                <a href="#park-info" class="nav-link">园区信息</a>
+                <a href="#stats-section" class="nav-link">实时统计</a>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn" id="help-btn" title="帮助中心">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <button class="nav-btn" id="language-btn" title="语言切换">
+                    <i class="fas fa-globe"></i>
+                </button>
+            </div>
+        </nav>        <!-- 智能欢迎头部 -->
+        <header class="welcome-header" role="banner">
             <div class="welcome-banner">
-                <h1>🎪 欢迎来到47游乐园！ 🎪</h1>
-                <div class="date-time-info">
-                    <span id="current-date-time"></span>
-                    <span id="weather-status"></span>
-                </div>
-            </div>
-        </header>
-
-        <!-- 票价说明 -->
-        <section class="price-info">
-            <h2>💰 票价说明</h2>
-            <div class="price-grid">
-                <div class="price-item">
-                    <span class="emoji">🍼</span>
-                    <span class="age">0-2岁婴幼儿</span>
-                    <span class="price">免费</span>
-                </div>
-                <div class="price-item">
-                    <span class="emoji">👶</span>
-                    <span class="age">3-17岁儿童</span>
-                    <span class="price">免费</span>
-                </div>
-                <div class="price-item">
-                    <span class="emoji">🎓</span>
-                    <span class="age">18-24岁学生</span>
-                    <span class="price">¥30</span>
-                </div>
-                <div class="price-item">
-                    <span class="emoji">👔</span>
-                    <span class="age">18-59岁成人</span>
-                    <span class="price">¥68</span>
-                </div>
-                <div class="price-item">
-                    <span class="emoji">👴</span>
-                    <span class="age">60岁以上老人</span>
-                    <span class="price">¥34</span>
-                </div>
-                <div class="price-item">
-                    <span class="emoji">♿</span>
-                    <span class="age">残疾人士</span>
-                    <span class="price">免费</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 优惠政策 -->
-        <section class="discount-info">
-            <h2>🎁 优惠政策</h2>
-            <ul class="discount-list">
-                <li>📅 工作日成人票9折</li>
-                <li>🌅 早鸟优惠（10点前）额外5%折扣</li>
-                <li>📈 周末票价上浮20%</li>
-            </ul>
-        </section>
-
-        <!-- 购票表单 -->
-        <section class="ticket-form">
-            <h2>🎫 购买门票</h2>
-            <form id="ticket-purchase-form">
-                <div class="form-group">
-                    <label for="age">👤 请输入您的年龄：</label>
-                    <input type="number" id="age" min="0" max="150" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>🎓 身份验证：</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="is-student">
-                            <span class="checkmark"></span>
-                            持有有效学生证
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="is-disabled">
-                            <span class="checkmark"></span>
-                            持有残疾证
-                        </label>
+                <div class="banner-content">
+                    <h1 class="welcome-title">
+                        <span class="title-emoji">🎪</span>
+                        <span class="title-text">欢迎来到47游乐园！</span>
+                        <span class="title-emoji">🎪</span>
+                    </h1>
+                    <div class="welcome-subtitle">
+                        <span class="subtitle-text">体验无限乐趣，创造美好回忆</span>
+                        <div class="subtitle-sparkles">
+                            <span class="sparkle">✨</span>
+                            <span class="sparkle">💫</span>
+                            <span class="sparkle">⭐</span>
+                        </div>
                     </div>
                 </div>
                 
-                <button type="submit" class="purchase-btn">
-                    <i class="fas fa-ticket-alt"></i>
-                    购买门票
-                </button>
-            </form>
-        </section>
+                <div class="date-time-panel">
+                    <div class="time-display">
+                        <div class="current-time">
+                            <i class="fas fa-clock time-icon"></i>
+                            <span id="current-date-time" class="time-text">加载中...</span>
+                        </div>
+                        <div class="weather-display">
+                            <span id="weather-status" class="weather-text">
+                                <span class="weather-icon">🌤️</span> 
+                                <span class="weather-desc">加载天气中...</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="park-status">
+                        <div class="status-item">
+                            <span class="status-label">园区状态</span>
+                            <span class="status-value open" id="park-status">🟢 正常营业</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">当前人流</span>
+                            <span class="status-value" id="crowd-level">🟡 适中</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">推荐指数</span>
+                            <span class="status-value" id="recommendation">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>        <!-- 主要内容区域 -->
+        <main class="main-content" role="main">
+            <!-- 左侧：票价说明 -->
+            <section id="price-info" class="price-info" aria-labelledby="price-title">
+                <header class="section-header">
+                    <h2 id="price-title" class="section-title">
+                        <i class="fas fa-money-bill-wave card-icon"></i>
+                        <span class="title-text">票价说明</span>
+                        <span class="title-badge">实时更新</span>
+                    </h2>
+                    <p class="section-subtitle">智能定价系统，为您提供最优惠的票价</p>
+                </header>
+                
+                <div class="price-grid" role="list">
+                    <article class="price-item" role="listitem" data-category="infant">
+                        <div class="price-icon">
+                            <span class="emoji">🍼</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">0-2岁婴幼儿</h3>
+                            <p class="age-desc">需家长陪同</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value free">免费</span>
+                            <span class="price-label">Free</span>
+                        </div>
+                    </article>
+                    
+                    <article class="price-item" role="listitem" data-category="child">
+                        <div class="price-icon">
+                            <span class="emoji">👶</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">3-17岁儿童</h3>
+                            <p class="age-desc">儿童专享优惠</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value free">免费</span>
+                            <span class="price-label">Free</span>
+                        </div>
+                    </article>
+                    
+                    <article class="price-item" role="listitem" data-category="student">
+                        <div class="price-icon">
+                            <span class="emoji">🎓</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">18-24岁学生</h3>
+                            <p class="age-desc">需出示学生证</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value student">¥30</span>
+                            <span class="price-label">Student</span>
+                        </div>
+                    </article>
+                    
+                    <article class="price-item" role="listitem" data-category="adult">
+                        <div class="price-icon">
+                            <span class="emoji">👔</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">18-59岁成人</h3>
+                            <p class="age-desc">标准票价</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value adult">¥68</span>
+                            <span class="price-label">Adult</span>
+                        </div>
+                    </article>
+                    
+                    <article class="price-item" role="listitem" data-category="senior">
+                        <div class="price-icon">
+                            <span class="emoji">👴</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">60岁以上老人</h3>
+                            <p class="age-desc">长者优惠价</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value senior">¥34</span>
+                            <span class="price-label">Senior</span>
+                        </div>
+                    </article>
+                    
+                    <article class="price-item" role="listitem" data-category="disabled">
+                        <div class="price-icon">
+                            <span class="emoji">♿</span>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="price-details">
+                            <h3 class="age-group">残疾人士</h3>
+                            <p class="age-desc">需出示残疾证</p>
+                        </div>
+                        <div class="price-tag">
+                            <span class="price-value free">免费</span>
+                            <span class="price-label">Free</span>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- 智能优惠政策 -->
+                <div class="discount-section">
+                    <header class="discount-header">
+                        <h3 class="discount-title">
+                            <i class="fas fa-gift discount-icon"></i>
+                            <span class="title-text">智能优惠政策</span>
+                            <span class="live-indicator">LIVE</span>
+                        </h3>
+                        <p class="discount-subtitle">系统将自动为您计算最优折扣组合</p>
+                    </header>
+                    
+                    <div class="discount-grid">
+                        <div class="discount-card workday">
+                            <div class="discount-icon">📅</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">工作日优惠</h4>
+                                <p class="discount-desc">周一至周五享受9折优惠</p>
+                                <span class="discount-rate">-10%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="discount-card early-bird">
+                            <div class="discount-icon">🌅</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">早鸟特惠</h4>
+                                <p class="discount-desc">10点前购票额外5%折扣</p>
+                                <span class="discount-rate">-5%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="discount-card weekend">
+                            <div class="discount-icon">📈</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">周末调价</h4>
+                                <p class="discount-desc">周末节假日票价上浮20%</p>
+                                <span class="discount-rate">+20%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="discount-card night">
+                            <div class="discount-icon">🌙</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">夜游模式</h4>
+                                <p class="discount-desc">19点后入园享受9折</p>
+                                <span class="discount-rate">-10%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="discount-card festival">
+                            <div class="discount-icon">🎉</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">节日特惠</h4>
+                                <p class="discount-desc">特殊节日限时85折</p>
+                                <span class="discount-rate">-15%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="discount-card group">
+                            <div class="discount-icon">👥</div>
+                            <div class="discount-info">
+                                <h4 class="discount-name">团体优惠</h4>
+                                <p class="discount-desc">5人以上享受团体价</p>
+                                <span class="discount-rate">询价</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>            <!-- 右侧：智能购票表单 -->
+            <section id="ticket-form" class="ticket-form" aria-labelledby="form-title">
+                <header class="section-header">
+                    <h2 id="form-title" class="section-title">
+                        <i class="fas fa-ticket-alt card-icon"></i>
+                        <span class="title-text">智能购票系统</span>
+                        <span class="title-badge">AI 智能</span>
+                    </h2>
+                    <p class="section-subtitle">我们的AI系统将为您推荐最优惠的购票方案</p>
+                </header>
+                
+                <form id="ticket-purchase-form" class="purchase-form" novalidate>
+                    <!-- 年龄输入 -->
+                    <div class="form-group age-input-group">
+                        <label for="age" class="form-label">
+                            <i class="fas fa-user form-icon"></i>
+                            <span class="label-text">请输入您的年龄</span>
+                            <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="number" 
+                                id="age" 
+                                class="form-input" 
+                                min="0" 
+                                max="150" 
+                                required 
+                                placeholder="例如：25"
+                                aria-describedby="age-help"
+                                autocomplete="off"
+                            >
+                            <div class="input-feedback" id="age-feedback"></div>
+                        </div>
+                        <div class="form-help" id="age-help">
+                            <i class="fas fa-info-circle"></i>
+                            <span>系统将根据年龄自动匹配合适的票价类型</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 身份验证 -->
+                    <div class="form-group identity-group">
+                        <label class="form-label">
+                            <i class="fas fa-id-card form-icon"></i>
+                            <span class="label-text">身份验证</span>
+                            <span class="label-optional">(可选)</span>
+                        </label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-card student-card" for="is-student">
+                                <input type="checkbox" id="is-student" class="checkbox-input">
+                                <div class="card-content">
+                                    <div class="card-icon">🎓</div>
+                                    <div class="card-text">
+                                        <h4 class="card-title">学生身份</h4>
+                                        <p class="card-desc">持有有效学生证</p>
+                                    </div>
+                                    <div class="card-indicator">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="checkbox-card disabled-card" for="is-disabled">
+                                <input type="checkbox" id="is-disabled" class="checkbox-input">
+                                <div class="card-content">
+                                    <div class="card-icon">♿</div>
+                                    <div class="card-text">
+                                        <h4 class="card-title">残疾人士</h4>
+                                        <p class="card-desc">持有残疾证</p>
+                                    </div>
+                                    <div class="card-indicator">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 实时价格预览 -->
+                    <div class="price-preview" id="price-preview">
+                        <div class="preview-header">
+                            <h3 class="preview-title">
+                                <i class="fas fa-calculator"></i>
+                                实时价格预览
+                            </h3>
+                            <span class="preview-status" id="preview-status">请输入年龄</span>
+                        </div>
+                        <div class="preview-content" id="preview-content">
+                            <div class="preview-item">
+                                <span class="preview-label">票价类型</span>
+                                <span class="preview-value" id="preview-type">-</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">基础票价</span>
+                                <span class="preview-value" id="preview-base">-</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">优惠折扣</span>
+                                <span class="preview-value" id="preview-discount">-</span>
+                            </div>
+                            <div class="preview-item total-price">
+                                <span class="preview-label">最终票价</span>
+                                <span class="preview-value" id="preview-final">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 提交按钮 -->
+                    <div class="form-actions">
+                        <button type="submit" class="purchase-btn" id="purchase-btn">
+                            <span class="btn-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </span>
+                            <span class="btn-text">立即购票</span>
+                            <span class="btn-loader">
+                                <div class="loading-spinner"></div>
+                            </span>
+                        </button>
+                        
+                        <button type="button" class="quick-fill-btn" id="quick-fill-btn" title="快速填写">
+                            <i class="fas fa-magic"></i>
+                            <span>快速填写</span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- 安全保障信息 -->
+                <div class="security-info">
+                    <div class="security-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>SSL加密保护</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-lock"></i>
+                        <span>隐私信息安全</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-undo"></i>
+                        <span>7天无理由退票</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-headset"></i>
+                        <span>24小时客服</span>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <!-- 门票显示区域 -->
         <section id="ticket-display" class="ticket-display" style="display: none;">
@@ -107,113 +495,791 @@
                 </div>
                 <div class="ticket-content">
                     <div class="ticket-info">
-                        <div class="info-item">
-                            <span class="label">🆔 票号：</span>
-                            <span id="ticket-id"></span>
+                        <div class="ticket-field">
+                            <span class="ticket-label">票号</span>
+                            <span class="ticket-value" id="ticket-id">-</span>
                         </div>
-                        <div class="info-item">
-                            <span class="label">👤 年龄：</span>
-                            <span id="ticket-age"></span>
+                        <div class="ticket-field">
+                            <span class="ticket-label">年龄</span>
+                            <span class="ticket-value" id="ticket-age">-</span>
                         </div>
-                        <div class="info-item">
-                            <span class="label">🎭 类别：</span>
-                            <span id="ticket-type"></span>
+                        <div class="ticket-field">
+                            <span class="ticket-label">类别</span>
+                            <span class="ticket-value" id="ticket-type">-</span>
                         </div>
-                        <div class="info-item">
-                            <span class="label">📅 日期：</span>
-                            <span id="ticket-date"></span>
+                        <div class="ticket-field">
+                            <span class="ticket-label">日期</span>
+                            <span class="ticket-value" id="ticket-date">-</span>
                         </div>
-                        <div class="info-item price-info-item">
-                            <span class="label">💰 票价：</span>
-                            <span id="ticket-price"></span>
+                        <div class="ticket-field">
+                            <span class="ticket-label">票价</span>
+                            <span class="ticket-value" id="ticket-price">-</span>
                         </div>
+                        
                         <div id="discount-info" class="discount-details" style="display: none;">
-                            <div class="info-item">
-                                <span class="label">💰 原价：</span>
-                                <span id="original-price"></span>
+                            <div class="ticket-field">
+                                <span class="ticket-label">原价</span>
+                                <span class="ticket-value" id="original-price">-</span>
                             </div>
-                            <div class="info-item">
-                                <span class="label">🎁 折扣：</span>
-                                <span id="discount-percent"></span>
+                            <div class="ticket-field">
+                                <span class="ticket-label">折扣</span>
+                                <span class="ticket-value" id="discount-percent">-</span>
                             </div>
-                            <div class="info-item">
-                                <span class="label">💳 实付：</span>
-                                <span id="final-price"></span>
+                            <div class="ticket-field">
+                                <span class="ticket-label">实付</span>
+                                <span class="ticket-value" id="final-price">-</span>
                             </div>
                         </div>
+                        
                         <div id="special-notes" class="special-notes" style="display: none;">
-                            <div class="label">📝 优惠详情：</div>
+                            <div class="ticket-label">优惠详情</div>
                             <ul id="notes-list"></ul>
                         </div>
                     </div>
-                    <div class="qr-code">
-                        <div class="qr-title">📱 请出示此票据入园：</div>
-                        <div class="qr-code-art" id="qr-code"></div>
+                    
+                    <div class="ticket-qr">
+                        <p class="qr-text">请出示此二维码入园</p>
+                        <div class="qr-code" id="qr-code">
+                            <!-- 二维码将在这里生成 -->
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="success-message">
-                <p>🎉 购票成功！祝您在47游乐园玩得愉快！</p>
+                <p>� 购票成功！祝您在47游乐园玩得愉快！</p>
                 <p>🛡️ 安全提醒：请遵守园区规定，注意人身安全！</p>
             </div>
-            
-            <button id="new-ticket-btn" class="new-ticket-btn">
+              <button id="new-ticket-btn" class="action-btn primary-btn">
                 <i class="fas fa-plus"></i>
-                购买新门票
+                <span>购买新门票</span>
             </button>
-        </section>
+        </section>        <!-- 实时统计仪表板 -->
+        <section id="stats-section" class="stats-section" aria-labelledby="stats-title">
+            <header class="section-header">
+                <h2 id="stats-title" class="section-title">
+                    <i class="fas fa-chart-line stat-icon"></i>
+                    <span class="title-text">实时统计仪表板</span>
+                    <span class="title-badge live">LIVE</span>
+                </h2>
+                <p class="section-subtitle">园区运营数据实时更新，透明公开</p>
+            </header>
+            
+            <div class="stats-dashboard">
+                <div class="stats-grid">
+                    <article class="stat-card visitors-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="trend-text">+12%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-visitors">0</div>
+                            <div class="stat-label">今日访客总数</div>
+                            <div class="stat-description">
+                                较昨日同期增长12%
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 68%"></div>
+                            </div>
+                            <span class="progress-text">68% 满载率</span>
+                        </div>
+                    </article>
+                    
+                    <article class="stat-card revenue-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="trend-text">+8%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-revenue">¥0</div>
+                            <div class="stat-label">今日营业收入</div>
+                            <div class="stat-description">
+                                预计达成月度目标105%
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <span class="progress-text">85% 目标完成</span>
+                        </div>
+                    </article>
+                    
+                    <article class="stat-card price-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="stat-trend stable">
+                                <i class="fas fa-minus"></i>
+                                <span class="trend-text">0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="avg-price">¥0</div>
+                            <div class="stat-label">平均票价</div>
+                            <div class="stat-description">
+                                智能定价系统优化
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%"></div>
+                            </div>
+                            <span class="progress-text">72% 价格优化</span>
+                        </div>
+                    </article>
+                    
+                    <article class="stat-card current-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="stat-trend down">
+                                <i class="fas fa-arrow-down"></i>
+                                <span class="trend-text">-5%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="current-visitors">0</div>
+                            <div class="stat-label">当前在园人数</div>
+                            <div class="stat-description">
+                                实时人流监控
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                            <span class="progress-text">45% 园区容量</span>
+                        </div>
+                    </article>
+                    
+                    <article class="stat-card satisfaction-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="trend-text">+3%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">4.8</div>
+                            <div class="stat-label">游客满意度</div>
+                            <div class="stat-description">
+                                基于实时反馈评分
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 96%"></div>
+                            </div>
+                            <span class="progress-text">96% 好评率</span>
+                        </div>
+                    </article>
+                    
+                    <article class="stat-card weather-card" role="article">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-cloud-sun"></i>
+                            </div>
+                            <div class="stat-trend stable">
+                                <i class="fas fa-check"></i>
+                                <span class="trend-text">优</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">23°C</div>
+                            <div class="stat-label">园区气温</div>
+                            <div class="stat-description">
+                                适宜游玩的好天气
+                            </div>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                            <span class="progress-text">88% 舒适度</span>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- 实时图表区域 -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-area"></i>
+                            今日访客流量趋势
+                        </h3>
+                        <div class="chart-placeholder" id="visitor-chart">
+                            <div class="chart-data">
+                                <div class="data-point" style="height: 20%;" data-time="08:00" data-visitors="45"></div>
+                                <div class="data-point" style="height: 35%;" data-time="09:00" data-visitors="78"></div>
+                                <div class="data-point" style="height: 55%;" data-time="10:00" data-visitors="123"></div>
+                                <div class="data-point" style="height: 70%;" data-time="11:00" data-visitors="156"></div>
+                                <div class="data-point" style="height: 85%;" data-time="12:00" data-visitors="189"></div>
+                                <div class="data-point" style="height: 90%;" data-time="13:00" data-visitors="201"></div>
+                                <div class="data-point" style="height: 80%;" data-time="14:00" data-visitors="178"></div>
+                                <div class="data-point" style="height: 75%;" data-time="15:00" data-visitors="167"></div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>08:00</span>
+                                <span>10:00</span>
+                                <span>12:00</span>
+                                <span>14:00</span>
+                                <span>16:00</span>
+                                <span>18:00</span>
+                                <span>20:00</span>
+                                <span>22:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>        <!-- 园区综合信息中心 -->
+        <section id="park-info" class="park-info" aria-labelledby="park-info-title">
+            <header class="section-header">
+                <h2 id="park-info-title" class="section-title">
+                    <i class="fas fa-map-marked-alt card-icon"></i>
+                    <span class="title-text">园区综合信息中心</span>
+                    <span class="title-badge">全方位</span>
+                </h2>
+                <p class="section-subtitle">为您的游园之旅提供全方位信息指南</p>
+            </header>
+            
+            <div class="info-dashboard">
+                <!-- 基础信息网格 -->
+                <div class="info-grid">
+                    <article class="info-card time-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-status open">
+                                <i class="fas fa-circle"></i>
+                                <span>营业中</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">开园时间</h3>
+                            <div class="card-details">
+                                <div class="time-slot">
+                                    <span class="time-label">营业时间</span>
+                                    <span class="time-value">08:00 - 22:00</span>
+                                </div>
+                                <div class="time-slot">
+                                    <span class="time-label">售票时间</span>
+                                    <span class="time-value">07:30 - 21:30</span>
+                                </div>
+                                <div class="time-slot">
+                                    <span class="time-label">服务状态</span>
+                                    <span class="time-value status-open">全年无休</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="info-card attractions-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="card-badge hot">HOT</div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">热门项目</h3>
+                            <div class="attractions-list">
+                                <div class="attraction-item">
+                                    <span class="attraction-name">🎢 极速过山车</span>
+                                    <span class="attraction-rating">⭐⭐⭐⭐⭐</span>
+                                </div>
+                                <div class="attraction-item">
+                                    <span class="attraction-name">🎡 浪漫摩天轮</span>
+                                    <span class="attraction-rating">⭐⭐⭐⭐⭐</span>
+                                </div>
+                                <div class="attraction-item">
+                                    <span class="attraction-name">🌊 激流勇进</span>
+                                    <span class="attraction-rating">⭐⭐⭐⭐</span>
+                                </div>
+                                <div class="attraction-item">
+                                    <span class="attraction-name">👻 恐怖鬼屋</span>
+                                    <span class="attraction-rating">⭐⭐⭐⭐</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="info-card dining-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="card-badge new">NEW</div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">餐饮服务</h3>
+                            <div class="dining-categories">
+                                <div class="category-item">
+                                    <div class="category-icon">🍔</div>
+                                    <div class="category-info">
+                                        <span class="category-name">美食广场</span>
+                                        <span class="category-desc">多种美食选择</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-icon">🍕</div>
+                                    <div class="category-info">
+                                        <span class="category-name">主题餐厅</span>
+                                        <span class="category-desc">特色主题用餐</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-icon">🥤</div>
+                                    <div class="category-info">
+                                        <span class="category-name">饮品小站</span>
+                                        <span class="category-desc">解渴休息好去处</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="info-card parking-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="card-status available">
+                                <i class="fas fa-circle"></i>
+                                <span>充足</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">停车信息</h3>
+                            <div class="parking-details">
+                                <div class="parking-item">
+                                    <i class="fas fa-car"></i>
+                                    <span>免费停车位充足</span>
+                                </div>
+                                <div class="parking-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>24小时安保监控</span>
+                                </div>
+                                <div class="parking-item">
+                                    <i class="fas fa-wheelchair"></i>
+                                    <span>无障碍停车位</span>
+                                </div>
+                                <div class="parking-item">
+                                    <i class="fas fa-charging-station"></i>
+                                    <span>电动车充电桩</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="info-card services-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-concierge-bell"></i>
+                            </div>
+                            <div class="card-badge premium">VIP</div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">便民服务</h3>
+                            <div class="services-grid">
+                                <div class="service-item">
+                                    <i class="fas fa-wifi"></i>
+                                    <span>免费WiFi</span>
+                                </div>
+                                <div class="service-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span>手机充电站</span>
+                                </div>
+                                <div class="service-item">
+                                    <i class="fas fa-search"></i>
+                                    <span>失物招领</span>
+                                </div>
+                                <div class="service-item">
+                                    <i class="fas fa-first-aid"></i>
+                                    <span>医务室</span>
+                                </div>
+                                <div class="service-item">
+                                    <i class="fas fa-baby"></i>
+                                    <span>母婴室</span>
+                                </div>
+                                <div class="service-item">
+                                    <i class="fas fa-camera"></i>
+                                    <span>拍照服务</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="info-card shop-card" role="article">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="card-badge discount">-20%</div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">纪念品商店</h3>
+                            <div class="shop-categories">
+                                <div class="shop-item">
+                                    <span class="item-name">🧸 精美玩具</span>
+                                    <span class="item-price">¥15起</span>
+                                </div>
+                                <div class="shop-item">
+                                    <span class="item-name">👕 主题服装</span>
+                                    <span class="item-price">¥59起</span>
+                                </div>
+                                <div class="shop-item">
+                                    <span class="item-name">📸 纪念相册</span>
+                                    <span class="item-price">¥25起</span>
+                                </div>
+                                <div class="shop-item">
+                                    <span class="item-name">🎁 特色礼品</span>
+                                    <span class="item-price">¥39起</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- 快捷导航 -->
+                <div class="quick-navigation">
+                    <h3 class="nav-title">
+                        <i class="fas fa-compass"></i>
+                        快捷导航
+                    </h3>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" data-target="map">
+                            <i class="fas fa-map"></i>
+                            <span>园区地图</span>
+                        </button>
+                        <button class="nav-btn" data-target="schedule">
+                            <i class="fas fa-calendar"></i>
+                            <span>演出时刻表</span>
+                        </button>
+                        <button class="nav-btn" data-target="weather">
+                            <i class="fas fa-cloud-sun"></i>
+                            <span>天气预报</span>
+                        </button>
+                        <button class="nav-btn" data-target="events">
+                            <i class="fas fa-star"></i>
+                            <span>特色活动</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 联系信息 -->
+                <div class="contact-section">
+                    <div class="contact-card">
+                        <div class="contact-header">
+                            <h3 class="contact-title">
+                                <i class="fas fa-phone-alt"></i>
+                                联系我们
+                            </h3>
+                            <span class="contact-badge">24小时</span>
+                        </div>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <div class="contact-info">
+                                    <span class="contact-label">客服热线</span>
+                                    <span class="contact-value">400-047-047</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-globe"></i>
+                                <div class="contact-info">
+                                    <span class="contact-label">官方网站</span>
+                                    <span class="contact-value">www.47park.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div class="contact-info">
+                                    <span class="contact-label">客服邮箱</span>
+                                    <span class="contact-value">service@47park.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="contact-info">
+                                    <span class="contact-label">园区地址</span>
+                                    <span class="contact-value">欢乐大道47号</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <h4 class="social-title">关注我们</h4>
+                            <div class="social-buttons">
+                                <button class="social-btn wechat">
+                                    <i class="fab fa-weixin"></i>
+                                    <span>微信</span>
+                                </button>
+                                <button class="social-btn weibo">
+                                    <i class="fab fa-weibo"></i>
+                                    <span>微博</span>
+                                </button>
+                                <button class="social-btn douyin">
+                                    <i class="fab fa-tiktok"></i>
+                                    <span>抖音</span>
+                                </button>
+                                <button class="social-btn xiaohongshu">
+                                    <i class="fas fa-heart"></i>
+                                    <span>小红书</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>    </div>
 
-        <!-- 园区信息 -->
-        <section class="park-info">
-            <h2>🎪 园区信息</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <i class="fas fa-clock"></i>
-                    <h3>开园时间</h3>
-                    <p>08:00 - 22:00</p>
+    <!-- 页面底部 -->
+    <footer class="page-footer" role="contentinfo">
+        <div class="footer-container">
+            <!-- 主要链接区域 -->
+            <div class="footer-main">
+                <div class="footer-section about-section">
+                    <h3 class="footer-title">
+                        <span class="footer-logo">🎪</span>
+                        关于47游乐园
+                    </h3>
+                    <p class="footer-desc">
+                        47游乐园致力于为每一位游客创造难忘的欢乐体验，我们拥有最先进的游乐设施、最贴心的服务团队，是您休闲娱乐的最佳选择。
+                    </p>
+                    <div class="footer-features">
+                        <span class="feature-tag">安全认证</span>
+                        <span class="feature-tag">品质保证</span>
+                        <span class="feature-tag">用户满意</span>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <i class="fas fa-star"></i>
-                    <h3>热门项目</h3>
-                    <p>过山车、摩天轮、激流勇进</p>
+                
+                <div class="footer-section links-section">
+                    <h3 class="footer-title">快速链接</h3>
+                    <div class="footer-links">
+                        <a href="#price-info" class="footer-link">票价信息</a>
+                        <a href="#ticket-form" class="footer-link">在线购票</a>
+                        <a href="#park-info" class="footer-link">园区信息</a>
+                        <a href="#stats-section" class="footer-link">实时统计</a>
+                        <a href="/map" class="footer-link">园区地图</a>
+                        <a href="/events" class="footer-link">精彩活动</a>
+                        <a href="/safety" class="footer-link">安全须知</a>
+                        <a href="/faq" class="footer-link">常见问题</a>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <i class="fas fa-utensils"></i>
-                    <h3>餐饮服务</h3>
-                    <p>美食广场、主题餐厅</p>
+                
+                <div class="footer-section services-section">
+                    <h3 class="footer-title">客户服务</h3>
+                    <div class="service-links">
+                        <div class="service-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="service-info">
+                                <span class="service-label">客服热线</span>
+                                <span class="service-value">400-047-047</span>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="service-info">
+                                <span class="service-label">邮箱支持</span>
+                                <span class="service-value">service@47park.com</span>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="service-info">
+                                <span class="service-label">服务时间</span>
+                                <span class="service-value">24小时在线</span>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-headset"></i>
+                            <div class="service-info">
+                                <span class="service-label">在线客服</span>
+                                <span class="service-value">即时响应</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <i class="fas fa-car"></i>
-                    <h3>停车信息</h3>
-                    <p>免费停车位充足</p>
+                
+                <div class="footer-section social-section">
+                    <h3 class="footer-title">关注我们</h3>
+                    <p class="social-desc">获取最新活动资讯和优惠信息</p>
+                    <div class="social-media">
+                        <a href="#" class="social-link wechat" title="关注微信公众号">
+                            <i class="fab fa-weixin"></i>
+                            <span>微信公众号</span>
+                        </a>
+                        <a href="#" class="social-link weibo" title="关注微博">
+                            <i class="fab fa-weibo"></i>
+                            <span>官方微博</span>
+                        </a>
+                        <a href="#" class="social-link douyin" title="关注抖音">
+                            <i class="fab fa-tiktok"></i>
+                            <span>抖音号</span>
+                        </a>
+                        <a href="#" class="social-link xiaohongshu" title="关注小红书">
+                            <i class="fas fa-heart"></i>
+                            <span>小红书</span>
+                        </a>
+                    </div>
+                    
+                    <div class="newsletter">
+                        <h4 class="newsletter-title">订阅通知</h4>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="输入邮箱地址" class="newsletter-input">
+                            <button class="newsletter-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="contact-info">
-                <p>📞 客服热线：400-047-047</p>
+            
+            <!-- 底部信息栏 -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; 2025 47游乐园. 保留所有权利.</p>
+                        <p>智能门票系统 v3.0 | 技术支持：47科技团队</p>
+                    </div>
+                    
+                    <div class="footer-badges">
+                        <div class="badge-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>安全认证</span>
+                        </div>
+                        <div class="badge-item">
+                            <i class="fas fa-award"></i>
+                            <span>品质保证</span>
+                        </div>
+                        <div class="badge-item">
+                            <i class="fas fa-lock"></i>
+                            <span>隐私保护</span>
+                        </div>
+                        <div class="badge-item">
+                            <i class="fas fa-heart"></i>
+                            <span>用户满意</span>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-links-bottom">
+                        <a href="/privacy" class="footer-link-bottom">隐私政策</a>
+                        <a href="/terms" class="footer-link-bottom">服务条款</a>
+                        <a href="/cookies" class="footer-link-bottom">Cookie政策</a>
+                        <a href="/sitemap" class="footer-link-bottom">网站地图</a>
+                    </div>
+                </div>
+                
+                <!-- 运营状态指示器 -->
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span class="status-text">系统运行正常</span>
+                    </div>
+                    <div class="last-updated">
+                        最后更新：<span id="last-update-time">正在获取...</span>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+    </footer>
 
-        <!-- 今日统计 -->
-        <section class="daily-stats">
-            <h2>📊 今日园区统计</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="total-visitors">0</div>
-                    <div class="stat-label">👥 总访客数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="total-revenue">¥0</div>
-                    <div class="stat-label">💰 总收入</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="avg-price">¥0</div>
-                    <div class="stat-label">📈 平均票价</div>
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="back-to-top" title="返回顶部">
+        <i class="fas fa-rocket"></i>
+    </button>
+
+    <!-- 帮助和支持弹窗 -->
+    <div class="help-modal" id="help-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-question-circle"></i>
+                    帮助中心
+                </h3>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="help-categories">
+                    <div class="help-category">
+                        <h4><i class="fas fa-ticket-alt"></i>购票问题</h4>
+                        <ul>
+                            <li>如何选择合适的票种？</li>
+                            <li>学生票需要什么证件？</li>
+                            <li>可以退票吗？</li>
+                            <li>团体票如何购买？</li>
+                        </ul>
+                    </div>
+                    <div class="help-category">
+                        <h4><i class="fas fa-map-marker-alt"></i>园区指南</h4>
+                        <ul>
+                            <li>园区开放时间</li>
+                            <li>交通指南</li>
+                            <li>园区地图</li>
+                            <li>停车指南</li>
+                        </ul>
+                    </div>
+                    <div class="help-category">
+                        <h4><i class="fas fa-cog"></i>技术支持</h4>
+                        <ul>
+                            <li>二维码无法显示</li>
+                            <li>支付问题</li>
+                            <li>系统使用帮助</li>
+                            <li>联系技术支持</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 
+    <!-- 核心脚本文件 -->
     <script src="script.js"></script>
+
+    <!-- 性能监控脚本 -->
+    <script>
+        // 页面性能监控
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`页面加载完成，耗时：${loadTime.toFixed(2)}ms`);
+            
+            // 更新系统状态
+            const lastUpdateElement = document.getElementById('last-update-time');
+            if (lastUpdateElement) {
+                lastUpdateElement.textContent = new Date().toLocaleString('zh-CN');
+            }
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('页面错误：', e.error);
+        });
+
+        // 页面离开前保存状态
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('47park_last_visit', Date.now());
+        });
+    </script>
 </body>
 </html>
